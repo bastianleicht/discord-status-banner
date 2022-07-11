@@ -1,0 +1,24 @@
+{
+  "name": "discord-status-banner",
+  "version": "1.0.0",
+  "description": "Discord Status Banner",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "github.com/bastianleicht/discord-status-banner"
+  },
+  "author": "bastianleicht",
+  "license": "BSD-2-Clause",
+  "dependencies": {
+    "@discordjs/builders": "^0.6.0",
+    "ascii-table": "^0.0.9",
+    "colors": "1.4.0",
+    "discord.js": "^13.1.0",
+    "moment": "^2.29.1",
+    "node-fetch": "^3.2.0",
+    "weather-js": "^2.0.0"
+  }
+}
