@@ -66,4 +66,17 @@ module.exports = async (client, oldMember, newMember) => {
     channel.send({ files: [attachment] })
         .catch(console.error);
 
+    channel.send(newMember.status);
+
+    let embed = new Discord.MessageEmbed();
+
+    if (!newMember.activities || newMember.activities.length === 0) {
+        embed.addField('⚽️ Activity:', 'Not playing anything')
+    } else {
+        const activity = newMember.activities[0];
+        embed.addField('⚽️ Activity:', `${activity.type} ${activity.name}\n${activity.details}\n${activity.state}`);
+    }
+
+    channel.send({ content: `test`, embeds: [embed]});
+
 }
