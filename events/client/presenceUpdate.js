@@ -1,5 +1,6 @@
 const Canvas = require("canvas");
 const Discord = require("discord.js");
+const fs = require('fs')
 const { registerFont, createCanvas } = require('canvas')
 registerFont('./whitney-bold.otf', { family: 'Whitney' })
 
@@ -83,5 +84,11 @@ module.exports = async (client, oldMember, newMember) => {
     }
 
     channel.send({ content: `test`, embeds: [embed]});
+
+    //const out = fs.createWriteStream(__dirname + '/test.png')
+    const out = fs.createWriteStream('./test.png')
+    const stream = canvas.createPNGStream()
+    stream.pipe(out)
+    out.on('finish', () =>  console.log('The PNG file was created.'))
 
 }
