@@ -15,10 +15,10 @@ module.exports = async (client, oldMember, newMember) => {
     //set the Background to the welcome.png
 
     // 395 x 80 px
-    const background = await Canvas.loadImage(`./banner1.png`);
+    const background = await Canvas.loadImage(`./banner1-1.png`);
     ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
     //ctx.strokeStyle = '#f2f2f2';
-    ctx.strokeRect(0, 0, canvas.width, canvas.height);
+    //ctx.strokeRect(0, 0, canvas.width, canvas.height);
     //define the Username
     const username = `${newMember.user.username}#${newMember.user.discriminator}`;
     //if the text is too big then smaller the text
@@ -30,7 +30,7 @@ module.exports = async (client, oldMember, newMember) => {
     //else dont do it
     else {
         ctx.font = 'bold 30px "Whitney"';
-        ctx.fillStyle = '#f2f2f2';
+        ctx.fillStyle = '#bec1c6';
         ctx.fillText(username, 70, canvas.height / 2 + 20);
     }
     //define the Member count
@@ -43,6 +43,13 @@ module.exports = async (client, oldMember, newMember) => {
     ctx.font = 'bold 60px "Roboto"';
     ctx.fillStyle = '#f2f2f2';
     ctx.fillText(textString4, 30, canvas.height / 2 - 150);
+
+    // Discord Logo
+    const discord_logo = await Canvas.loadImage(`./discord-logo-1.png`);
+
+    //draw the discord logo
+    ctx.drawImage(discord_logo, 316, (canvas.height / 2) - 5, 69.4, 20);
+
     //create a circular "mask"
     ctx.beginPath();
     ctx.arc(40, canvas.height / 2, 34, 0, Math.PI * 2, true);//position of img
