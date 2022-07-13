@@ -15,13 +15,11 @@ module.exports = async (client, oldMember, newMember) => {
     const canvas = Canvas.createCanvas(395, 80);
     //make it "2D"
     const ctx = canvas.getContext('2d');
-    //set the Background to the welcome.png
 
     // 395 x 80 px
     const background = await Canvas.loadImage(`./banner1-1.png`);
     ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
-    //ctx.strokeStyle = '#f2f2f2';
-    //ctx.strokeRect(0, 0, canvas.width, canvas.height);
+
     //define the Username
     const username = `${newMember.user.username}#${newMember.user.discriminator}`;
     //if the text is too big then smaller the text
@@ -65,16 +63,6 @@ module.exports = async (client, oldMember, newMember) => {
             color = "gray";
             status_text = "Unknown";
     }
-
-    // Status Dot
-    /*
-    ctx.arc(20, canvas.height / 2, 30, 0, Math.PI * 2, true);
-    ctx.fillStyle = 'green';
-    ctx.fill();
-    ctx.lineWidth = 5;
-    ctx.strokeStyle = '#003300';
-    ctx.stroke();
-     */
 
     //draw the status label
     ctx.font = 'bold 14px "Whitney"';
