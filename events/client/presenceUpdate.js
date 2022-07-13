@@ -35,33 +35,43 @@ module.exports = async (client, oldMember, newMember) => {
     }
 
     // Status Logic
-    let color = "";
-    let status_text = "";
+    let color, status_text, status_icon;
 
     switch (newMember.status) {
         case "online":
             color = "#43b581";
             status_text = "Online";
+            status_icon = "./assets/online.png";
             break;
 
         case "idle":
             color = "#fda317";
             status_text = "Idle";
+            status_icon = "./assets/idle.png";
             break;
 
         case "dnd":
             color = "#f2474d";
             status_text = "Do Not Disturb";
+            status_icon = "./assets/dnd.png";
             break;
 
         case "offline":
-            color = "gray";
+            color = "#747f8d";
             status_text = "Offline";
+            status_icon = "./assets/offline.png";
+            break;
+
+        case "streaming":
+            color = "#747f8d";
+            status_text = "Streaming";
+            status_icon = "./assets/streaming.png";
             break;
 
         default:
-            color = "gray";
+            color = "#747f8d";
             status_text = "Unknown";
+            status_icon = "./assets/offline.png";
     }
 
     //draw the status label
