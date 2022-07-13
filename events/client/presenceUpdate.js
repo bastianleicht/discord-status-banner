@@ -23,16 +23,9 @@ module.exports = async (client, oldMember, newMember) => {
     //define the Username
     const username = `${newMember.user.username}#${newMember.user.discriminator}`;
     //if the text is too big then smaller the text
-    if (username.length >= 14) {
-        ctx.font = 'bold 15px "Whitney"';
-        ctx.fillStyle = '#bec1c6';
-        ctx.fillText(username, 88, canvas.height / 2 - 20);
-    } else {
-        //else don't do it
-        ctx.font = 'bold 30px "Whitney"';
-        ctx.fillStyle = '#bec1c6';
-        ctx.fillText(username, 70, canvas.height / 2 + 20);
-    }
+    ctx.font = 'bold 15px "Whitney"';
+    ctx.fillStyle = '#bec1c6';
+    ctx.fillText(username, 88, canvas.height / 2 - 20);
 
     // Status Logic
     let color, status_text, status_icon;
