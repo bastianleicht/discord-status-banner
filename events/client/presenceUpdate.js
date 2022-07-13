@@ -86,19 +86,34 @@ module.exports = async (client, oldMember, newMember) => {
     ctx.fillStyle = color;
     ctx.fillText(status_text, 145, canvas.height / 2 + 8);
 
-    const activity = newMember.activities[0];
-    if(activity.type === "CUSTOM") {
-
-    } else {
+    if (!newMember.activities || newMember.activities.length === 0) {
         //draw the activity label
         ctx.font = 'bold 14px "Whitney"';
         ctx.fillStyle = '#c2c4c7';
-        ctx.fillText('Status:', 90, canvas.height / 2 + 8);
+        ctx.fillText('Playing:', 90, canvas.height / 2 + 27);
 
         //draw the status text
-        ctx.font = '14px "Lato"';
-        ctx.fillStyle = color;
-        ctx.fillText(status_text, 145, canvas.height / 2 + 8);
+        ctx.font = 'italic 13px "Lato"';
+        ctx.fillStyle = '#7c7c7c';
+        ctx.fillText('Currently not running any process/game.', 145, canvas.height / 2 + 27);
+    } else {
+        const activity = newMember.activities[0];
+        if(activity.type === "CUSTOM") {
+            //draw the status text
+            ctx.font = '14px "Lato"';
+            ctx.fillStyle = '#ffffff';
+            ctx.fillText(activity.state, 90, canvas.height / 2 + 27);
+        } else {
+            //draw the activity label
+            ctx.font = 'bold 14px "Whitney"';
+            ctx.fillStyle = '#c2c4c7';
+            ctx.fillText('Playing:', 90, canvas.height / 2 + 27);
+
+            //draw the status text
+            ctx.font = '14px "Lato"';
+            ctx.fillStyle = color;
+            ctx.fillText(activity.state, 145, canvas.height / 2 + 27);
+        }
     }
 
     //draw activity text
@@ -141,7 +156,7 @@ module.exports = async (client, oldMember, newMember) => {
     if (!newMember.activities || newMember.activities.length === 0) {
         embed.addField('⚽️ Activity:', 'Not playing anything')
     } else {
-
+        const activity = newMember.activities[0];
         embed.addField('⚽️ Activity:', `${activity.type} ${activity.name}\n${activity.details}\n${activity.state}`);
     }
 
