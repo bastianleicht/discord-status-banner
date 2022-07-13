@@ -29,19 +29,79 @@ module.exports = async (client, oldMember, newMember) => {
         ctx.font = 'bold 15px "Whitney"';
         ctx.fillStyle = '#bec1c6';
         ctx.fillText(username, 88, canvas.height / 2 - 20);
-    }
-    //else dont do it
-    else {
+    } else {
+        //else don't do it
         ctx.font = 'bold 30px "Whitney"';
         ctx.fillStyle = '#bec1c6';
         ctx.fillText(username, 70, canvas.height / 2 + 20);
     }
-    //define the Member count
-    var textString4 = `Member #${newMember.guild.memberCount}`;
-    ctx.font = 'bold 60px "Roboto"';
-    ctx.fillStyle = '#f2f2f2';
-    ctx.fillText(textString4, 10, canvas.height / 2 + 125);
-    //get the Guild Name
+
+    // Status Logic
+    let color = "";
+    let status_text = "";
+
+    switch (newMember.status) {
+        case "online":
+            color = "#43b581";
+            status_text = "Online";
+            break;
+
+        case "idle":
+            color = "#fda317";
+            status_text = "Idle";
+            break;
+
+        case "dnd":
+            color = "#f2474d";
+            status_text = "Do Not Disturb";
+            break;
+
+        case "offline":
+            color = "gray";
+            status_text = "Offline";
+            break;
+
+        default:
+            color = "gray";
+            status_text = "Unknown";
+    }
+
+    // Status Dot
+    /*
+    ctx.arc(20, canvas.height / 2, 30, 0, Math.PI * 2, true);
+    ctx.fillStyle = 'green';
+    ctx.fill();
+    ctx.lineWidth = 5;
+    ctx.strokeStyle = '#003300';
+    ctx.stroke();
+     */
+
+    //draw the status label
+    ctx.font = 'bold 14px "Whitney"';
+    ctx.fillStyle = '#c2c4c7';
+    ctx.fillText('Status:', 90, canvas.height / 2 + 8);
+
+    //draw the status text
+    ctx.font = '14px "Lato"';
+    ctx.fillStyle = color;
+    ctx.fillText(status_text, 145, canvas.height / 2 + 8);
+
+    const activity = newMember.activities[0];
+    if(activity.type === "CUSTOM") {
+
+    } else {
+        //draw the activity label
+        ctx.font = 'bold 14px "Whitney"';
+        ctx.fillStyle = '#c2c4c7';
+        ctx.fillText('Status:', 90, canvas.height / 2 + 8);
+
+        //draw the status text
+        ctx.font = '14px "Lato"';
+        ctx.fillStyle = color;
+        ctx.fillText(status_text, 145, canvas.height / 2 + 8);
+    }
+
+    //draw activity text
     var textString4 = `${newMember.guild.name}`;
     ctx.font = 'bold 60px "Roboto"';
     ctx.fillStyle = '#f2f2f2';
@@ -51,9 +111,9 @@ module.exports = async (client, oldMember, newMember) => {
     const discord_logo = await Canvas.loadImage(`./discord-logo-1.png`);
 
     //draw the discord logo
-    ctx.drawImage(discord_logo, 316, (canvas.height / 2) - 5, 69.4, 20);
+    //ctx.drawImage(discord_logo, 316, (canvas.height / 2) - 35, 69.4, 20);
 
-    //create a circular "mask"
+    //create a circular avatar "mask"
     ctx.beginPath();
     ctx.arc(40, canvas.height / 2, 34, 0, Math.PI * 2, true);//position of img
     ctx.closePath();
@@ -81,7 +141,7 @@ module.exports = async (client, oldMember, newMember) => {
     if (!newMember.activities || newMember.activities.length === 0) {
         embed.addField('⚽️ Activity:', 'Not playing anything')
     } else {
-        const activity = newMember.activities[0];
+
         embed.addField('⚽️ Activity:', `${activity.type} ${activity.name}\n${activity.details}\n${activity.state}`);
     }
 
