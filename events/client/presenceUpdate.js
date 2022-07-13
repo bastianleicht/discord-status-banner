@@ -107,12 +107,6 @@ module.exports = async (client, oldMember, newMember) => {
         }
     }
 
-    //draw activity text
-    var textString4 = `${newMember.guild.name}`;
-    ctx.font = 'bold 60px "Roboto"';
-    ctx.fillStyle = '#f2f2f2';
-    ctx.fillText(textString4, 30, canvas.height / 2 - 150);
-
     // Discord Logo
     const discord_logo = await Canvas.loadImage(`./discord-logo-1.png`);
 
