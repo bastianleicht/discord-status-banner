@@ -127,10 +127,10 @@ module.exports = async (client, oldMember, newMember) => {
     //ctx.drawImage(discord_logo, 316, (canvas.height / 2) - 35, 69.4, 20);
 
     //create a circular avatar "mask"
-    ctx.beginPath();
-    ctx.arc(40, canvas.height / 2, 34, 0, Math.PI * 2, true);//position of img
-    ctx.closePath();
-    ctx.clip();
+    //ctx.beginPath();
+    //ctx.arc(40, canvas.height / 2, 34, 0, Math.PI * 2, true);//position of img
+    //ctx.closePath();
+    //ctx.clip();
 
     //define the user avatar
     const avatar = await Canvas.loadImage(newMember.user.displayAvatarURL({ format: 'jpg' }));
@@ -143,7 +143,7 @@ module.exports = async (client, oldMember, newMember) => {
     ctx.clip();
 
     // Render Image in Circle
-    ctx.drawImage(avatar, 7, (canvas.height / 2) - 35, 68, 68);
+    ctx.drawImage(avatar, 6, (canvas.height / 2) - 34, 68, 68);
 
 
     ctx.beginPath();
