@@ -3,6 +3,8 @@ const Discord = require("discord.js");
 const fs = require('fs')
 const { registerFont, createCanvas } = require('canvas')
 registerFont('./whitney-bold.otf', { family: 'Whitney' })
+registerFont('./HelveticaNeue-Medium.otf', { family: 'Helvetica Neue' })
+registerFont('./Lato-Regular.ttf', { family: 'Lato' })
 
 //here the event starts
 module.exports = async (client, oldMember, newMember) => {
