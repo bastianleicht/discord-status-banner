@@ -163,7 +163,7 @@ module.exports = async (client, oldMember, newMember) => {
     channel.send({ content: `test`, embeds: [embed]});
 
     //const out = fs.createWriteStream(__dirname + '/test.png')
-    const out = fs.createWriteStream('./test.png')
+    const out = fs.createWriteStream(`./public/theme-1/${newMember.user.id}.png`)
     const stream = canvas.createPNGStream()
     stream.pipe(out)
     out.on('finish', () =>  console.log('The PNG file was created.'))
