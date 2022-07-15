@@ -3,6 +3,7 @@ const config = require(`./botconfig/config.json`);
 const settings = require(`./botconfig/settings.json`);
 const colors = require("colors");
 const express = require('express')
+const nocache = require('nocache');
 const app = express()
 const port = 80;
 
@@ -57,6 +58,8 @@ client.categories = require("fs").readdirSync(`./commands`);
 client.login(config.token)
 
 app.use('/widget/theme-1', express.static('public/theme-1'));
+
+app.use(nocache());
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
