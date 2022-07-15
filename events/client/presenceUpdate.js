@@ -192,7 +192,7 @@ module.exports = async (client, oldMember, newMember) => {
     stream.pipe(out)
     out.on('finish', () =>  {
             console.log('The PNG file was created.');
-            log_channel.send(`<@${newMember.user.id}> Your Status Updated \n https://discord.bastianleicht.de/widget/theme-1/${newMember.user.id}.png`)
+            log_channel.send({ content: `<@${newMember.user.id}> Your Status Updated \n <https://discord.bastianleicht.de/widget/theme-1/${newMember.user.id}.png>`, files: [attachment]})
     });
 
 }
