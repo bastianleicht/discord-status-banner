@@ -94,7 +94,14 @@ module.exports = async (client, oldMember, newMember) => {
             ctx.font = '14px "Lato"';
             ctx.fillStyle = '#ffffff';
             ctx.fillText(activity.state, 90, canvas.height / 2 + 27);
-        } else {
+        } else if(activity.type === 'PLAYING') {
+            const length = 38;
+
+            let activity_string = `${activity.name} | ${activity.details}`;
+            const trimmedString = activity_string.length > length ?
+                activity_string.substring(0, length - 3) + "..." :
+                activity_string
+
             //draw the activity label
             ctx.font = 'bold 14px "Whitney"';
             ctx.fillStyle = '#c2c4c7';
@@ -103,7 +110,7 @@ module.exports = async (client, oldMember, newMember) => {
             //draw the status text
             ctx.font = '14px "Lato"';
             ctx.fillStyle = color;
-            ctx.fillText(activity.state, 145, canvas.height / 2 + 27);
+            ctx.fillText(trimmedString, 145, canvas.height / 2 + 27);
         }
     }
 
