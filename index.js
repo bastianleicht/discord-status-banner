@@ -4,7 +4,7 @@ const settings = require(`./botconfig/settings.json`);
 const colors = require("colors");
 const express = require('express')
 const app = express()
-const port = 3000
+const port = 80;
 
 const client = new Discord.Client({
     //fetchAllMembers: false,
