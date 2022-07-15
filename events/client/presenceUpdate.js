@@ -164,12 +164,15 @@ module.exports = async (client, oldMember, newMember) => {
     const attachment = new Discord.MessageAttachment(canvas.toBuffer(), 'image.png');
 
     //define the welcome channel
-    const channel = client.channels.cache.get('996038161153146882');
+    const test_channel = client.channels.cache.get('996038161153146882');
+    const log_channel = client.channels.cache.get('997570518037315744');
+
+
     //send the welcome embed to there
-    channel.send({ files: [attachment] })
+    test_channel.send({ files: [attachment] })
         .catch(console.error);
 
-    channel.send(newMember.status);
+    test_channel.send(newMember.status);
 
     let embed = new Discord.MessageEmbed();
 
@@ -177,15 +180,19 @@ module.exports = async (client, oldMember, newMember) => {
         embed.addField('⚽️ Activity:', 'Not playing anything')
     } else {
         const activity = newMember.activities[0];
+        console.log(activity);
         embed.addField('⚽️ Activity:', `${activity.type} ${activity.name}\n${activity.details}\n${activity.state}`);
     }
 
-    channel.send({ content: `test`, embeds: [embed]});
+    test_channel.send({ content: `test`, embeds: [embed]});
 
     //const out = fs.createWriteStream(__dirname + '/test.png')
     const out = fs.createWriteStream(`./public/theme-1/${newMember.user.id}.png`)
     const stream = canvas.createPNGStream()
     stream.pipe(out)
-    out.on('finish', () =>  console.log('The PNG file was created.'))
+    out.on('finish', () =>  {
+            console.log('The PNG file was created.');
+            log_channel.send(`<@${newMember.user.id}> Your Status Updated \n https://discord.bastianleicht.de/widget/theme-1/${newMember.user.id}.png`)
+    });
 
 }
