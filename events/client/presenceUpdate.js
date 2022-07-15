@@ -97,6 +97,18 @@ module.exports = async (client, oldMember, newMember) => {
         } else if(activity.type === 'PLAYING') {
             const length = 38;
 
+            let activity_icon_large = null;
+            let activity_icon_small = null;
+
+            console.log(activity);
+            if(activity.assets.largeImage !== null) {
+                activity_icon_large = `https://cdn.discordapp.com/app-assets/${activity.applicationId}/${activity.assets.largeImage}.png`;
+            }
+
+            if(activity.assets.smallImage !== null) {
+                activity_icon_small = `https://cdn.discordapp.com/app-assets/${activity.applicationId}/${activity.assets.smallImage}.png`;
+            }
+
             let activity_string = `${activity.name} | ${activity.details}`;
             const trimmedString = activity_string.length > length ?
                 activity_string.substring(0, length - 3) + "..." :
