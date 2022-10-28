@@ -3,7 +3,12 @@ const Discord = require("discord.js");
 const fs = require("fs");
 const config = require(`../botconfig/config.json`);
 const fetch = require('isomorphic-unfetch')
+const {registerFont} = require("canvas");
 const { getData, getPreview, getTracks, getDetails } = require('spotify-url-info')(fetch)
+registerFont('./assets/fonts/whitney-bold.otf', { family: 'Whitney' })
+registerFont('./assets/fonts/HelveticaNeue-Medium.otf', { family: 'Helvetica Neue' })
+registerFont('./assets/fonts/Lato-Regular.ttf', { family: 'Lato' })
+
 module.exports.createPresence = createPresence
 
 function roundedImage(ctx, x, y, width, height, radius) {
