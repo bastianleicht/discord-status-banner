@@ -8,6 +8,7 @@ const { getData, getPreview, getTracks, getDetails } = require('spotify-url-info
 const {customBackgroundHandler} = require("./presenceHandler/customBackgroundHandler");
 const {defaultPlayingHandler} = require("./presenceHandler/defaultPlayingHandler");
 const {spotifyHandler} = require("./presenceHandler/apps/spotifyHandler");
+const {avatarHandler} = require("./presenceHandler/avatarHandler");
 
 registerFont('./assets/fonts/whitney-bold.otf', { family: 'Whitney' })
 registerFont('./assets/fonts/HelveticaNeue-Medium.otf', { family: 'Helvetica Neue' })
@@ -41,7 +42,7 @@ const StringHelper = str => {
 
 async function createPresence(client, user, presence) {
     if(user.bot) return;
-    let backgroundCanvas, activityCanvas;
+    let backgroundCanvas, activityCanvas, avatarCanvas;
 
     // create "main" Canvas
     const canvas = Canvas.createCanvas(395, 80);
@@ -204,45 +205,10 @@ async function createPresence(client, user, presence) {
     //draw the discord logo
     ctx.drawImage(discord_logo, 316, (canvas.height / 2) - 35, 69.4, 20);
 
-    //create a circular avatar "mask"
-    //ctx.beginPath();
-    //ctx.arc(40, canvas.height / 2, 34, 0, Math.PI * 2, true);//position of img
-    //ctx.closePath();
-    //ctx.clip();
-
     //define the user avatar
     const avatar = await Canvas.loadImage(user.displayAvatarURL({ format: 'jpg' }));
-
-    // Create Avatar Circle
-    ctx.save();
-    ctx.beginPath();
-    ctx.arc(40, (canvas.height / 2), 34, 0, Math.PI * 2, true);
-    ctx.closePath();
-    ctx.clip();
-
-    // Render Image in Circle
-    ctx.drawImage(avatar, 6, (canvas.height / 2) - 34, 68, 68);
-
-
-    ctx.beginPath();
-    ctx.arc(5, (canvas.height / 2) - 35, 34, 0, Math.PI * 2, true);
-    ctx.closePath();
-    ctx.clip();
-    ctx.restore();
-
-    // Draw Status Circle
-    ctx.fillStyle = color;
-    ctx.beginPath();
-    ctx.arc(62, (canvas.height / 2) + 21, 7, 0, 2 * Math.PI);
-    ctx.fill();
-    // Outline with background Color
-    ctx.lineWidth = 2;
-    ctx.strokeStyle = '#1b1e21';
-    ctx.stroke();
-
-    //draw the status icon
-    //const s_icon = await Canvas.loadImage(status_icon);
-    //ctx.drawImage(s_icon, 55, (canvas.height / 2) + 15, 14, 14);
+    avatarCanvas = await avatarHandler(avatar, color);
+    ctx.drawImage(avatarCanvas, 0, 0);
 
     //get it as a discord attachment
     const attachment = new Discord.MessageAttachment(canvas.toBuffer(), 'image.png');
