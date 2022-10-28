@@ -25,9 +25,7 @@ module.exports = client => {
     // Check Presences every 5 Seconds
     setInterval(() => {
       client.guilds.cache.get('996038160637243409').members.fetch({ withPresences: true }).then(fetchedMembers => {
-        fetchedMembers.forEach(member => function () {
-          createPresence(client, member.user, member.presence);
-        });
+        fetchedMembers.forEach(member => createPresence(client, member.user, member.presence));
       });
     }, 5 * 1000)
   
