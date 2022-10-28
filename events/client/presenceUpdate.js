@@ -1,4 +1,5 @@
 const {createPresence} = require("../../handlers/createPresence");
+const Discord = require("discord.js");
 
 //here the event starts
 module.exports = async (client, oldMember, newMember) => {
@@ -7,7 +8,10 @@ module.exports = async (client, oldMember, newMember) => {
     console.log(`Old Presence: ${oldMember.status} | New Presence: ${newMember.status}`);
 
     const user = await client.users.fetch(newMember.userId);
-    createPresence(client, user, newMember);
+    let canvas = await createPresence(client, user, newMember);
+    const attachment = new Discord.MessageAttachment(canvas.toBuffer(), 'image.png');
+    const log_channel = client.channels.cache.get('1035282377947222026');
+    log_channel.send({ content: `<@${user.id}> Your Status Updated \n <https://discord.bastianleicht.de/widget/theme-1/${user.id}.png>`, files: [attachment]})
 
     /*
     const canvas = Canvas.createCanvas(395, 80);
