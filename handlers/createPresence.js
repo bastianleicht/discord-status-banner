@@ -13,7 +13,7 @@ registerFont('./assets/fonts/whitney-bold.otf', { family: 'Whitney' })
 registerFont('./assets/fonts/HelveticaNeue-Medium.otf', { family: 'Helvetica Neue' })
 registerFont('./assets/fonts/Lato-Regular.ttf', { family: 'Lato' })
 
-module.exports.createPresence = createPresence
+module.exports.createPresence = createPresence;
 
 function roundedImage(ctx, x, y, width, height, radius) {
     ctx.beginPath();
@@ -64,7 +64,7 @@ async function createPresence(client, user, presence) {
     //define the Username
     const username = `${user.username}#${user.discriminator}`;
     //if the text is too big then smaller the text
-    ctx.font = 'bold 15px "Whitney"';
+    ctx.font = 'bold 15px "Whitney", Arial';
     ctx.fillStyle = '#bec1c6';
     ctx.fillText(username, 88, canvas.height / 2 - 20);
 

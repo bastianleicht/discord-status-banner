@@ -55,7 +55,7 @@ module.exports.spotifyHandler = async function spotifyHandler(activity) {
     cover_ctx.drawImage(spotify_logo, 90, (song_cover_canvas.height / 2) + 14, 18, 18);
 
     //draw the activity text
-    cover_ctx.font = '14px "Lato"';
+    cover_ctx.font = '14px "Lato", Arial';
     cover_ctx.fillStyle = '#FFFFFF';
     cover_ctx.fillText(trimmedString, 110, canvas.height / 2 + 27);
 
