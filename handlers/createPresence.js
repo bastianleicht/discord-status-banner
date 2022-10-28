@@ -6,6 +6,8 @@ const {registerFont} = require("canvas");
 const { getData, getPreview, getTracks, getDetails } = require('spotify-url-info')(fetch)
 
 const {customBackgroundHandler} = require("./presenceHandler/customBackgroundHandler");
+const {defaultPlayingHandler} = require("./presenceHandler/defaultPlayingHandler");
+const {spotifyHandler} = require("./presenceHandler/apps/spotifyHandler");
 
 registerFont('./assets/fonts/whitney-bold.otf', { family: 'Whitney' })
 registerFont('./assets/fonts/HelveticaNeue-Medium.otf', { family: 'Helvetica Neue' })
@@ -39,7 +41,7 @@ const StringHelper = str => {
 
 async function createPresence(client, user, presence) {
     if(user.bot) return;
-    let backgroundCanvas;
+    let backgroundCanvas, activityCanvas;
 
     // create "main" Canvas
     const canvas = Canvas.createCanvas(395, 80);
@@ -112,6 +114,8 @@ async function createPresence(client, user, presence) {
     ctx.fillText('Status:', 90, canvas.height / 2 + 8);
 
     if (!presence?.activities || presence?.activities.length === 0) {
+        // NOTE: No activity found
+
         //draw the status text
         ctx.font = '14px "Lato"';
         ctx.fillStyle = color;
@@ -127,6 +131,7 @@ async function createPresence(client, user, presence) {
         ctx.fillStyle = '#7c7c7c';
         ctx.fillText('Currently not running any process/game.', 145, canvas.height / 2 + 27);
     } else {
+        // NOTE: Activity was found
         let activity = presence.activities[0];
 
         // Always select the Last "added" activity. Else it would always display the Custom Status.
@@ -141,39 +146,8 @@ async function createPresence(client, user, presence) {
             ctx.fillStyle = '#ffffff';
             ctx.fillText(activity.state, 90, canvas.height / 2 + 27);
         } else if(activity.type === 'PLAYING') {
-            const length = 38;
-
-            let activity_icon_large = null;
-            let activity_icon_small = null;
-
-            //console.log(activity);
-            if(activity.assets?.largeImage !== null) {
-                activity_icon_large = `https://cdn.discordapp.com/app-assets/${activity.applicationId}/${activity.assets.largeImage}.png`;
-            }
-
-            if(activity.assets?.smallImage !== null) {
-                activity_icon_small = `https://cdn.discordapp.com/app-assets/${activity.applicationId}/${activity.assets.smallImage}.png`;
-            }
-
-            let activity_string = `${activity.name} | ${activity.details}`;
-            const trimmedString = activity_string.length > length ?
-                activity_string.substring(0, length - 3) + "..." :
-                activity_string
-
-            //draw the status text
-            ctx.font = '14px "Lato"';
-            ctx.fillStyle = color;
-            ctx.fillText(status_text, 145, canvas.height / 2 + 8);
-
-            //draw the activity label
-            ctx.font = 'bold 14px "Whitney"';
-            ctx.fillStyle = '#c2c4c7';
-            ctx.fillText('Playing:', 90, canvas.height / 2 + 27);
-
-            //draw the activity text
-            ctx.font = '14px "Lato"';
-            ctx.fillStyle = color;
-            ctx.fillText(trimmedString, 145, canvas.height / 2 + 27);
+            activityCanvas = await defaultPlayingHandler(activity, status_text, color);
+            ctx.drawImage(activityCanvas, 0, 0);
         } else if(activity.type === 'LISTENING') {
             let length = 38;
 
@@ -192,90 +166,35 @@ async function createPresence(client, user, presence) {
             //console.log(activity_icon_small);
             //console.log(activity_icon_large);
 
-            if(activity.name === "Spotify") {
-                let spotifyData;
-                await getDetails('https://open.spotify.com/track/' + activity.syncId).then(data => spotifyData = data);
+            switch (activity.name) {
+                case "Spotify": {
+                    activityCanvas = await spotifyHandler(activity);
+                    ctx.drawImage(activityCanvas, 0, 0);
+                } break;
 
-                let song_string = `${spotifyData.preview.title} - ${spotifyData.preview.artist}`;
+                default: {
+                    let activity_string = `${activity.name} | ${activity.details}`;
+                    const trimmedString = activity_string.length > length ?
+                        activity_string.substring(0, length - 3) + "..." :
+                        activity_string
 
-                // https://stackoverflow.com/a/23161562
-                const uppercaseCount = song_string.length - song_string.replace(/[A-Z]/g, '').length;
-                if(uppercaseCount >= 20) {
-                    length = 29;
-                } else {
-                    length = 35;
+                    //draw the status text
+                    ctx.font = '14px "Lato"';
+                    ctx.fillStyle = color;
+                    ctx.fillText(status_text, 145, canvas.height / 2 + 8);
+
+                    //draw the activity label
+                    ctx.font = 'bold 14px "Whitney"';
+                    ctx.fillStyle = '#c2c4c7';
+                    ctx.fillText('Playing:', 90, canvas.height / 2 + 27);
+
+                    //draw the status text
+                    ctx.font = '14px "Lato"';
+                    ctx.fillStyle = color;
+                    ctx.fillText(trimmedString, 145, canvas.height / 2 + 27);
                 }
-
-                const trimmedString = StringHelper(song_string).truncate(length)
-
-                let status_text = `Listening to ${activity.name}`;
-
-                const song_cover_canvas = Canvas.createCanvas(395, 80);
-                //make it "2D"
-                const cover_ctx = song_cover_canvas.getContext('2d');
-
-                //draw the status text
-                cover_ctx.font = '14px "Lato"';
-                cover_ctx.fillStyle = '#40b681';
-                cover_ctx.fillText(status_text, 145, song_cover_canvas.height / 2 + 8);
-
-                //draw the activity label
-                /*
-                ctx.font = 'bold 14px "Whitney"';
-                ctx.fillStyle = '#c2c4c7';
-                ctx.fillText('Playing:', 90, canvas.height / 2 + 27);
-                */
-                const spotify_logo = await Canvas.loadImage('./assets/spotify_18x18.png');
-                // Render Image in Circle
-                cover_ctx.drawImage(spotify_logo, 90, (song_cover_canvas.height / 2) + 14, 18, 18);
-
-                //draw the activity text
-                cover_ctx.font = '14px "Lato"';
-                cover_ctx.fillStyle = '#FFFFFF';
-                cover_ctx.fillText(trimmedString, 110, canvas.height / 2 + 27);
-
-                // TODO: Start
-                // TODO: Redo the rounded Corners!
-                // Create Avatar Circle
-                cover_ctx.save();
-                cover_ctx.beginPath();
-                cover_ctx.arc(370, (song_cover_canvas.height / 2) + 14, 25, 0, Math.PI * 2, true);
-                cover_ctx.closePath();
-                cover_ctx.clip();
-
-                let song_cover = await Canvas.loadImage(spotifyData.preview.image);
-                // Render Image in Circle
-                cover_ctx.drawImage(song_cover, 350, (song_cover_canvas.height / 2) - 6, 40, 40);
-                // TODO: End
-
-                ctx.drawImage(song_cover_canvas, 0, 0);
-
-                //TODO TEST
-                //const attachment = new Discord.MessageAttachment(song_cover_canvas.toBuffer(), 'image.png');
-                //const log_channel = client.channels.cache.get('1035282377947222026');
-                //log_channel.send({ content: `TEST`, files: [attachment]})
-                // TODO TEST
-            } else {
-                let activity_string = `${activity.name} | ${activity.details}`;
-                const trimmedString = activity_string.length > length ?
-                    activity_string.substring(0, length - 3) + "..." :
-                    activity_string
-
-                //draw the status text
-                ctx.font = '14px "Lato"';
-                ctx.fillStyle = color;
-                ctx.fillText(status_text, 145, canvas.height / 2 + 8);
-
-                //draw the activity label
-                ctx.font = 'bold 14px "Whitney"';
-                ctx.fillStyle = '#c2c4c7';
-                ctx.fillText('Playing:', 90, canvas.height / 2 + 27);
-
-                //draw the status text
-                ctx.font = '14px "Lato"';
-                ctx.fillStyle = color;
-                ctx.fillText(trimmedString, 145, canvas.height / 2 + 27);
             }
+
         }
     }
 
