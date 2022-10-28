@@ -1,7 +1,6 @@
 const Canvas = require("canvas");
 const Discord = require("discord.js");
 const fs = require("fs");
-const config = require(`../botconfig/config.json`);
 const fetch = require('isomorphic-unfetch')
 const {registerFont} = require("canvas");
 const { getData, getPreview, getTracks, getDetails } = require('spotify-url-info')(fetch)
@@ -301,10 +300,10 @@ async function createPresence(client, user, presence) {
     }
 
     // Discord Logo
-    const discord_logo = await Canvas.loadImage(`./discord-logo-1.png`);
+    const discord_logo = await Canvas.loadImage(`./assets/discord-logo.png`);
 
     //draw the discord logo
-    //ctx.drawImage(discord_logo, 316, (canvas.height / 2) - 35, 69.4, 20);
+    ctx.drawImage(discord_logo, 316, (canvas.height / 2) - 35, 69.4, 20);
 
     //create a circular avatar "mask"
     //ctx.beginPath();
