@@ -21,14 +21,7 @@ function roundedImage(ctx, x, y, width, height, radius) {
 }
 
 async function createPresence(client, guildMember) {
-    //console.log(guildMember.presence);
-    //return null;
-
-    if(guildMember.user.bot) {
-        return;
-    }
-
-    //const cachedMember = guild.members.cache.get(memberPresence.userId);
+    if(guildMember.user.bot) return;
 
     const canvas = Canvas.createCanvas(395, 80);
     //make it "2D"
@@ -81,7 +74,7 @@ async function createPresence(client, guildMember) {
 
         default:
             color = "#747f8d";
-            status_text = "Unknown";
+            status_text = "Offline";
             status_icon = "./assets/offline.png";
     }
 
