@@ -153,6 +153,152 @@ async function createPresence(client, guildMember) {
             ctx.font = '14px "Lato"';
             ctx.fillStyle = color;
             ctx.fillText(trimmedString, 145, canvas.height / 2 + 27);
+        } else if(activity.type === 'LISTENING') {
+            let length = 38;
+
+            let activity_icon_large = null;
+            let activity_icon_small = null;
+
+            console.log(activity);
+            if(activity.assets?.largeImage !== null) {
+                activity_icon_large = `https://cdn.discordapp.com/app-assets/${activity.applicationId}/${activity.assets.largeImage}.png`;
+            }
+
+            if(activity.assets?.smallImage !== null) {
+                activity_icon_small = `https://cdn.discordapp.com/app-assets/${activity.applicationId}/${activity.assets.smallImage}.png`;
+            }
+
+            //console.log(activity_icon_small);
+            //console.log(activity_icon_large);
+
+            if(activity.name === "Spotify") {
+                let spotifyData;
+                await getDetails('https://open.spotify.com/track/' + activity.syncId).then(data => spotifyData = data);
+
+                /*
+                let trackQuery = 'https://api.spotify.com/v1/tracks/' + activity.syncId;
+                let spotifyResponse = {};
+                await axios.get(trackQuery, {
+                    headers: {
+                        Authorization: `Bearer ${config.spotify.oauth}` }
+                }).then(response => spotifyResponse = response.data);
+
+                //console.log(spotifyResponse)
+                let json = JSON.parse(JSON.stringify(spotifyResponse));
+
+                console.log(json)
+
+                let artistsCount = json.artists.length;
+                //"images": [
+                //       {
+                //         "height": 64,
+                //         "url": "https://i.scdn.co/image/ab67616d00004851697139b846fe2e76b86c8f21",
+                //         "width": 64
+                //       },
+                //       {
+                //         "height": 300,
+                //         "url": "https://i.scdn.co/image/ab67616d00001e02697139b846fe2e76b86c8f21",
+                //         "width": 300
+                //       },
+                //       {
+                //         "height": 640,
+                //         "url": "https://i.scdn.co/image/ab67616d0000b273697139b846fe2e76b86c8f21",
+                //         "width": 640
+                //       }
+                //     ],
+                let songCover = json.album.images[1];
+
+                console.log(json.artists)
+
+                let featured = "";
+                for (let i = 1; i <= artistsCount; i++) {
+                    featured += ', ' + json.artists[i].name;
+                }
+
+                let song_string = `${json.album.name} - ${json.artists[0].name} ${featured}`;
+
+                const trimmedString = song_string.length > length ?
+                    song_string.substring(0, length - 3) + "..." :
+                    song_string
+                 */
+
+                //console.log(spotifyData);
+
+                let song_string = `${spotifyData.preview.title} - ${spotifyData.preview.artist}`;
+
+                length = 35;
+                const trimmedString = song_string.length > length ?
+                    song_string.substring(0, length - 3) + "..." :
+                    song_string
+
+                let status_text = `Listening to ${activity.name}`;
+
+                const song_cover_canvas = Canvas.createCanvas(395, 80);
+                //make it "2D"
+                const cover_ctx = song_cover_canvas.getContext('2d');
+
+                //draw the status text
+                cover_ctx.font = '14px "Lato"';
+                cover_ctx.fillStyle = '#40b681';
+                cover_ctx.fillText(status_text, 145, song_cover_canvas.height / 2 + 8);
+
+                //draw the activity label
+                /*
+                ctx.font = 'bold 14px "Whitney"';
+                ctx.fillStyle = '#c2c4c7';
+                ctx.fillText('Playing:', 90, canvas.height / 2 + 27);
+                */
+                const spotify_logo = await Canvas.loadImage('./assets/spotify_18x18.png');
+                // Render Image in Circle
+                cover_ctx.drawImage(spotify_logo, 90, (song_cover_canvas.height / 2) + 14, 18, 18);
+
+                //draw the activity text
+                cover_ctx.font = '14px "Lato"';
+                cover_ctx.fillStyle = '#FFFFFF';
+                cover_ctx.fillText(trimmedString, 110, canvas.height / 2 + 27);
+
+                // TODO: Start
+                // TODO: Redo the rounded Corners!
+                // Create Avatar Circle
+                cover_ctx.save();
+                cover_ctx.beginPath();
+                cover_ctx.arc(370, (song_cover_canvas.height / 2) + 14, 25, 0, Math.PI * 2, true);
+                cover_ctx.closePath();
+                cover_ctx.clip();
+
+                let song_cover = await Canvas.loadImage(spotifyData.preview.image);
+                // Render Image in Circle
+                cover_ctx.drawImage(song_cover, 350, (song_cover_canvas.height / 2) - 6, 40, 40);
+                // TODO: End
+
+                ctx.drawImage(song_cover_canvas, 0, 0);
+
+                //TODO TEST
+                //const attachment = new Discord.MessageAttachment(song_cover_canvas.toBuffer(), 'image.png');
+                //const log_channel = client.channels.cache.get('1035282377947222026');
+                //log_channel.send({ content: `TEST`, files: [attachment]})
+                // TODO TEST
+            } else {
+                let activity_string = `${activity.name} | ${activity.details}`;
+                const trimmedString = activity_string.length > length ?
+                    activity_string.substring(0, length - 3) + "..." :
+                    activity_string
+
+                //draw the status text
+                ctx.font = '14px "Lato"';
+                ctx.fillStyle = color;
+                ctx.fillText(status_text, 145, canvas.height / 2 + 8);
+
+                //draw the activity label
+                ctx.font = 'bold 14px "Whitney"';
+                ctx.fillStyle = '#c2c4c7';
+                ctx.fillText('Playing:', 90, canvas.height / 2 + 27);
+
+                //draw the status text
+                ctx.font = '14px "Lato"';
+                ctx.fillStyle = color;
+                ctx.fillText(trimmedString, 145, canvas.height / 2 + 27);
+            }
         }
     }
 
