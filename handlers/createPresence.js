@@ -4,6 +4,9 @@ const fs = require("fs");
 const fetch = require('isomorphic-unfetch')
 const {registerFont} = require("canvas");
 const { getData, getPreview, getTracks, getDetails } = require('spotify-url-info')(fetch)
+
+const {customBackgroundHandler} = require("./presenceHandler/customBackgroundHandler");
+
 registerFont('./assets/fonts/whitney-bold.otf', { family: 'Whitney' })
 registerFont('./assets/fonts/HelveticaNeue-Medium.otf', { family: 'Helvetica Neue' })
 registerFont('./assets/fonts/Lato-Regular.ttf', { family: 'Lato' })
@@ -36,30 +39,24 @@ const StringHelper = str => {
 
 async function createPresence(client, user, presence) {
     if(user.bot) return;
+    let backgroundCanvas;
 
+    // create "main" Canvas
     const canvas = Canvas.createCanvas(395, 80);
-    //make it "2D"
+    // make it "2D"
     const ctx = canvas.getContext('2d');
 
     // 395 x 80 px
-    const background = await Canvas.loadImage(`./background-1.png`);
-    ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
-
     let custom_bg = false;
     if(custom_bg === true) {
+        // TODO: Load Images from URL
         const background = await Canvas.loadImage(`./test-bg.png`);
-        ctx.drawImage(background,
-            canvas.width / 2 - background.width / 2,
-            canvas.height / 2 - background.height / 2
-        );
-        /*
-        ctx.translate(canvas.width/2,canvas.height/2);
-        ctx.drawImage(background,-background.width/2,-background.height/2);
-        ctx.translate(-canvas.width/2,-canvas.height/2);
-         */
-
-        const background_fade = await Canvas.loadImage(`./background-faded.png`);
-        ctx.drawImage(background_fade, 0, 0, canvas.width, canvas.height);
+        backgroundCanvas = await customBackgroundHandler(background);
+        // Append backgroundCanvas to main canvas.
+        ctx.drawImage(backgroundCanvas, 0, 0);
+    } else {
+        const background = await Canvas.loadImage(`./background-1.png`);
+        ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
     }
 
     //define the Username
