@@ -1,7 +1,24 @@
 const Canvas = require("canvas");
 const Discord = require("discord.js");
 const fs = require("fs");
+const config = require(`../botconfig/config.json`);
+const fetch = require('isomorphic-unfetch')
+const { getData, getPreview, getTracks, getDetails } = require('spotify-url-info')(fetch)
 module.exports.createPresence = createPresence
+
+function roundedImage(ctx, x, y, width, height, radius) {
+    ctx.beginPath();
+    ctx.moveTo(x + radius, y);
+    ctx.lineTo(x + width - radius, y);
+    ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+    ctx.lineTo(x + width, y + height - radius);
+    ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+    ctx.lineTo(x + radius, y + height);
+    ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+    ctx.lineTo(x, y + radius);
+    ctx.quadraticCurveTo(x, y, x + radius, y);
+    ctx.closePath();
+}
 
 async function createPresence(client, guildMember) {
     //console.log(guildMember.presence);
@@ -73,12 +90,12 @@ async function createPresence(client, guildMember) {
     ctx.fillStyle = '#c2c4c7';
     ctx.fillText('Status:', 90, canvas.height / 2 + 8);
 
-    //draw the status text
-    ctx.font = '14px "Lato"';
-    ctx.fillStyle = color;
-    ctx.fillText(status_text, 145, canvas.height / 2 + 8);
-
     if (!guildMember.presence?.activities || guildMember.presence?.activities.length === 0) {
+        //draw the status text
+        ctx.font = '14px "Lato"';
+        ctx.fillStyle = color;
+        ctx.fillText(status_text, 145, canvas.height / 2 + 8);
+
         //draw the activity label
         ctx.font = 'bold 14px "Whitney"';
         ctx.fillStyle = '#c2c4c7';
@@ -115,12 +132,17 @@ async function createPresence(client, guildMember) {
                 activity_string.substring(0, length - 3) + "..." :
                 activity_string
 
+            //draw the status text
+            ctx.font = '14px "Lato"';
+            ctx.fillStyle = color;
+            ctx.fillText(status_text, 145, canvas.height / 2 + 8);
+
             //draw the activity label
             ctx.font = 'bold 14px "Whitney"';
             ctx.fillStyle = '#c2c4c7';
             ctx.fillText('Playing:', 90, canvas.height / 2 + 27);
 
-            //draw the status text
+            //draw the activity text
             ctx.font = '14px "Lato"';
             ctx.fillStyle = color;
             ctx.fillText(trimmedString, 145, canvas.height / 2 + 27);
