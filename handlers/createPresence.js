@@ -33,7 +33,7 @@ async function createPresence(client, user, presence) {
     const ctx = canvas.getContext('2d');
 
     // 395 x 80 px
-    const background = await Canvas.loadImage(`./banner1-1.png`);
+    const background = await Canvas.loadImage(`./background-1.png`);
     ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
 
     //define the Username
