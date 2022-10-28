@@ -4,6 +4,7 @@ const ee = require("../../botconfig/embed.json");
 const settings = require("../../botconfig/settings.json");
 const { createPresence } = require("../../handlers/createPresence");
 const {GetUser} = require("../../handlers/functions");
+const Discord = require("discord.js");
 module.exports = {
     name: "test",
     category: "Owner",
@@ -24,7 +25,10 @@ module.exports = {
         try{
             let user = await GetUser(message, args)
             let member = message.guild.members.cache.get(user.id);
-            await createPresence(client, user, member.presence);
+            let canvas = await createPresence(client, user, member.presence);
+
+            const attachment = new Discord.MessageAttachment(canvas.toBuffer(), 'image.png');
+            message.reply({ content: `<@${user.id}> Your Status Updated \n <https://discord.bastianleicht.de/widget/theme-1/${user.id}.png>`, files: [attachment]})
         } catch (e) {
             console.log(String(e.stack).bgRed)
             return message.reply({embeds: [new MessageEmbed()
