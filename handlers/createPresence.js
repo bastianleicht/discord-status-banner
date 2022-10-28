@@ -224,9 +224,15 @@ async function createPresence(client, user, presence) {
                 let song_string = `${spotifyData.preview.title} - ${spotifyData.preview.artist}`;
 
                 length = 29;
-                const trimmedString = song_string.length > length ?
-                    song_string.substring(0, length - 3) + "..." :
-                    song_string
+                const StringHelper = str => {
+                    const sliceBoundary = str => str.substr(0, str.lastIndexOf(" "));
+                    const truncate = (n, useWordBoundary) =>
+                        str.length <= n ? str : `${ useWordBoundary
+                            ? sliceBoundary(str.slice(0, n - 1))
+                            : str.slice(0, n - 1)}...`;
+                    return { full: str,  truncate };
+                };
+                const trimmedString = StringHelper(song_string).truncate(length)
 
                 let status_text = `Listening to ${activity.name}`;
 
