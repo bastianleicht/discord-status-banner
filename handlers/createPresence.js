@@ -45,6 +45,23 @@ async function createPresence(client, user, presence) {
     const background = await Canvas.loadImage(`./background-1.png`);
     ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
 
+    let custom_bg = false;
+    if(custom_bg === true) {
+        const background = await Canvas.loadImage(`./test-bg.png`);
+        ctx.drawImage(background,
+            canvas.width / 2 - background.width / 2,
+            canvas.height / 2 - background.height / 2
+        );
+        /*
+        ctx.translate(canvas.width/2,canvas.height/2);
+        ctx.drawImage(background,-background.width/2,-background.height/2);
+        ctx.translate(-canvas.width/2,-canvas.height/2);
+         */
+
+        const background_fade = await Canvas.loadImage(`./background-faded.png`);
+        ctx.drawImage(background_fade, 0, 0, canvas.width, canvas.height);
+    }
+
     //define the Username
     const username = `${user.username}#${user.discriminator}`;
     //if the text is too big then smaller the text
