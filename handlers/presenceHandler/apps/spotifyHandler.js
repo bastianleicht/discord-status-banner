@@ -44,12 +44,6 @@ module.exports.spotifyHandler = async function spotifyHandler(activity) {
     cover_ctx.fillStyle = '#40b681';
     cover_ctx.fillText(status_text, 145, song_cover_canvas.height / 2 + 8);
 
-    //draw the activity label
-    /*
-    ctx.font = 'bold 14px "Whitney"';
-    ctx.fillStyle = '#c2c4c7';
-    ctx.fillText('Playing:', 90, canvas.height / 2 + 27);
-    */
     const spotify_logo = await Canvas.loadImage('./assets/spotify_18x18.png');
     // Render Image in Circle
     cover_ctx.drawImage(spotify_logo, 90, (song_cover_canvas.height / 2) + 14, 18, 18);

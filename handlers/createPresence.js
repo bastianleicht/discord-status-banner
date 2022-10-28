@@ -205,15 +205,15 @@ async function createPresence(client, user, presence) {
     //draw the discord logo
     ctx.drawImage(discord_logo, 316, (canvas.height / 2) - 35, 69.4, 20);
 
-    //define the user avatar
+    // create the User Avatar and Status dot
     const avatar = await Canvas.loadImage(user.displayAvatarURL({ format: 'jpg' }));
     avatarCanvas = await avatarHandler(avatar, color);
     ctx.drawImage(avatarCanvas, 0, 0);
 
-    //get it as a discord attachment
+    // get the Image as a discord attachment
     const attachment = new Discord.MessageAttachment(canvas.toBuffer(), 'image.png');
 
-    //define the channel
+    //define the channel (DEBUG)
     const log_channel = client.channels.cache.get('1035282377947222026');
 
     //const out = fs.createWriteStream(__dirname + '/test.png')
