@@ -20,8 +20,8 @@ function roundedImage(ctx, x, y, width, height, radius) {
     ctx.closePath();
 }
 
-async function createPresence(client, guildMember) {
-    if(guildMember.user.bot) return;
+async function createPresence(client, user, presence) {
+    if(user.bot) return;
 
     const canvas = Canvas.createCanvas(395, 80);
     //make it "2D"
@@ -32,7 +32,7 @@ async function createPresence(client, guildMember) {
     ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
 
     //define the Username
-    const username = `${guildMember.user.username}#${guildMember.user.discriminator}`;
+    const username = `${user.username}#${user.discriminator}`;
     //if the text is too big then smaller the text
     ctx.font = 'bold 15px "Whitney"';
     ctx.fillStyle = '#bec1c6';
@@ -41,7 +41,7 @@ async function createPresence(client, guildMember) {
     // Status Logic
     let color, status_text, status_icon;
 
-    switch (guildMember.presence?.status) {
+    switch (presence?.status) {
         case "online":
             color = "#43b581";
             status_text = "Online";
@@ -83,7 +83,7 @@ async function createPresence(client, guildMember) {
     ctx.fillStyle = '#c2c4c7';
     ctx.fillText('Status:', 90, canvas.height / 2 + 8);
 
-    if (!guildMember.presence?.activities || guildMember.presence?.activities.length === 0) {
+    if (!presence?.activities || presence?.activities.length === 0) {
         //draw the status text
         ctx.font = '14px "Lato"';
         ctx.fillStyle = color;
@@ -99,12 +99,12 @@ async function createPresence(client, guildMember) {
         ctx.fillStyle = '#7c7c7c';
         ctx.fillText('Currently not running any process/game.', 145, canvas.height / 2 + 27);
     } else {
-        let activity = guildMember.presence.activities[0];
+        let activity = presence.activities[0];
 
         // Always select the Last "added" activity. Else it would always display the Custom Status.
         // TODO: Add Setting to change this.
-        if(guildMember.presence.activities.length > 1) {
-            activity = guildMember.presence.activities[guildMember.presence.activities.length - 1];
+        if(presence.activities.length > 1) {
+            activity = presence.activities[presence.activities.length - 1];
         }
 
         if(activity.type === "CUSTOM") {
@@ -308,7 +308,7 @@ async function createPresence(client, guildMember) {
     //ctx.clip();
 
     //define the user avatar
-    const avatar = await Canvas.loadImage(guildMember.user.displayAvatarURL({ format: 'jpg' }));
+    const avatar = await Canvas.loadImage(user.displayAvatarURL({ format: 'jpg' }));
 
     // Create Avatar Circle
     ctx.save();
@@ -348,7 +348,7 @@ async function createPresence(client, guildMember) {
     const log_channel = client.channels.cache.get('1035282377947222026');
 
     //const out = fs.createWriteStream(__dirname + '/test.png')
-    const out = fs.createWriteStream(`./public/theme-1/${guildMember.user.id}.png`)
+    const out = fs.createWriteStream(`./public/theme-1/${user.id}.png`)
     const stream = canvas.createPNGStream()
     stream.pipe(out)
     out.on('finish', () =>  {
@@ -356,4 +356,5 @@ async function createPresence(client, guildMember) {
         //log_channel.send({ content: `<@ ${guildMember.user.id}> Your Status Updated \n <https://discord.bastianleicht.de/widget/theme-1/${guildMember.user.id}.png>`, files: [attachment]})
     });
 
+    return canvas;
 }

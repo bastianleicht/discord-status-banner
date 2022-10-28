@@ -1,10 +1,4 @@
-const Canvas = require("canvas");
-const Discord = require("discord.js");
-const fs = require('fs')
-const { registerFont, createCanvas } = require('canvas')
-registerFont('./whitney-bold.otf', { family: 'Whitney' })
-registerFont('./HelveticaNeue-Medium.otf', { family: 'Helvetica Neue' })
-registerFont('./Lato-Regular.ttf', { family: 'Lato' })
+const {createPresence} = require("../../handlers/createPresence");
 
 //here the event starts
 module.exports = async (client, oldMember, newMember) => {
@@ -12,6 +6,10 @@ module.exports = async (client, oldMember, newMember) => {
     //console.log(newMember);
     console.log(`Old Presence: ${oldMember.status} | New Presence: ${newMember.status}`);
 
+    const user = await client.users.fetch(newMember.userId);
+    createPresence(client, user, newMember);
+
+    /*
     const canvas = Canvas.createCanvas(395, 80);
     //make it "2D"
     const ctx = canvas.getContext('2d');
@@ -206,5 +204,6 @@ module.exports = async (client, oldMember, newMember) => {
             console.log('The PNG file was created.');
             log_channel.send({ content: `<@${newMember.user.id}> Your Status Updated \n <https://discord.bastianleicht.de/widget/theme-1/${newMember.user.id}.png>`, files: [attachment]})
     });
+     */
 
 }

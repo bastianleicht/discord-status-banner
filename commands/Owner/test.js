@@ -24,7 +24,7 @@ module.exports = {
         try{
             let user = await GetUser(message, args)
             let member = message.guild.members.cache.get(user.id);
-            await createPresence(client, member)
+            await createPresence(client, user, member.presence);
         } catch (e) {
             console.log(String(e.stack).bgRed)
             return message.reply({embeds: [new MessageEmbed()
