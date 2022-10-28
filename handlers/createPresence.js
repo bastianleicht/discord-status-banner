@@ -106,7 +106,14 @@ async function createPresence(client, guildMember) {
         ctx.fillStyle = '#7c7c7c';
         ctx.fillText('Currently not running any process/game.', 145, canvas.height / 2 + 27);
     } else {
-        const activity = guildMember.presence.activities[0];
+        let activity = guildMember.presence.activities[0];
+
+        // Always select the Last "added" activity. Else it would always display the Custom Status.
+        // TODO: Add Setting to change this.
+        if(guildMember.presence.activities.length > 1) {
+            activity = guildMember.presence.activities[guildMember.presence.activities.length - 1];
+        }
+
         if(activity.type === "CUSTOM") {
             //draw the status text
             ctx.font = '14px "Lato"';
