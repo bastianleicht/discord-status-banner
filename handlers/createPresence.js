@@ -219,7 +219,7 @@ async function createPresence(client, guildMember) {
 
                 let song_string = `${spotifyData.preview.title} - ${spotifyData.preview.artist}`;
 
-                length = 35;
+                length = 29;
                 const trimmedString = song_string.length > length ?
                     song_string.substring(0, length - 3) + "..." :
                     song_string
