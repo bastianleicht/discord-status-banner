@@ -24,6 +24,16 @@ function roundedImage(ctx, x, y, width, height, radius) {
     ctx.closePath();
 }
 
+// https://stackoverflow.com/a/1199420
+const StringHelper = str => {
+    const sliceBoundary = str => str.substr(0, str.lastIndexOf(" "));
+    const truncate = (n, useWordBoundary) =>
+        str.length <= n ? str : `${ useWordBoundary
+            ? sliceBoundary(str.slice(0, n - 1))
+            : str.slice(0, n - 1)}...`;
+    return { full: str,  truncate };
+};
+
 async function createPresence(client, user, presence) {
     if(user.bot) return;
 
@@ -172,66 +182,16 @@ async function createPresence(client, user, presence) {
                 let spotifyData;
                 await getDetails('https://open.spotify.com/track/' + activity.syncId).then(data => spotifyData = data);
 
-                /*
-                let trackQuery = 'https://api.spotify.com/v1/tracks/' + activity.syncId;
-                let spotifyResponse = {};
-                await axios.get(trackQuery, {
-                    headers: {
-                        Authorization: `Bearer ${config.spotify.oauth}` }
-                }).then(response => spotifyResponse = response.data);
-
-                //console.log(spotifyResponse)
-                let json = JSON.parse(JSON.stringify(spotifyResponse));
-
-                console.log(json)
-
-                let artistsCount = json.artists.length;
-                //"images": [
-                //       {
-                //         "height": 64,
-                //         "url": "https://i.scdn.co/image/ab67616d00004851697139b846fe2e76b86c8f21",
-                //         "width": 64
-                //       },
-                //       {
-                //         "height": 300,
-                //         "url": "https://i.scdn.co/image/ab67616d00001e02697139b846fe2e76b86c8f21",
-                //         "width": 300
-                //       },
-                //       {
-                //         "height": 640,
-                //         "url": "https://i.scdn.co/image/ab67616d0000b273697139b846fe2e76b86c8f21",
-                //         "width": 640
-                //       }
-                //     ],
-                let songCover = json.album.images[1];
-
-                console.log(json.artists)
-
-                let featured = "";
-                for (let i = 1; i <= artistsCount; i++) {
-                    featured += ', ' + json.artists[i].name;
-                }
-
-                let song_string = `${json.album.name} - ${json.artists[0].name} ${featured}`;
-
-                const trimmedString = song_string.length > length ?
-                    song_string.substring(0, length - 3) + "..." :
-                    song_string
-                 */
-
-                //console.log(spotifyData);
-
                 let song_string = `${spotifyData.preview.title} - ${spotifyData.preview.artist}`;
 
-                length = 29;
-                const StringHelper = str => {
-                    const sliceBoundary = str => str.substr(0, str.lastIndexOf(" "));
-                    const truncate = (n, useWordBoundary) =>
-                        str.length <= n ? str : `${ useWordBoundary
-                            ? sliceBoundary(str.slice(0, n - 1))
-                            : str.slice(0, n - 1)}...`;
-                    return { full: str,  truncate };
-                };
+                // https://stackoverflow.com/a/23161562
+                const uppercaseCount = song_string.length - song_string.replace(/[A-Z]/g, '').length;
+                if(uppercaseCount >= 20) {
+                    length = 29;
+                } else {
+                    length = 35;
+                }
+
                 const trimmedString = StringHelper(song_string).truncate(length)
 
                 let status_text = `Listening to ${activity.name}`;
