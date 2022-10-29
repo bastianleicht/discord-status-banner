@@ -144,6 +144,11 @@ async function createPresence(client, user, presence) {
         if(activity.type === "CUSTOM") {
             //draw the status text
             ctx.font = '14px "Lato"';
+            ctx.fillStyle = color;
+            ctx.fillText(status_text, 145, canvas.height / 2 + 8);
+
+            //draw the activity text
+            ctx.font = '14px "Lato"';
             ctx.fillStyle = '#ffffff';
             ctx.fillText(activity.state, 90, canvas.height / 2 + 27);
         } else if(activity.type === 'PLAYING') {
