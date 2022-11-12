@@ -58,14 +58,22 @@ client.categories = require("fs").readdirSync(`./commands`);
 //Start the Bot
 client.login(config.token)
 
+// Set static files
 app.use('/styles', express.static(__dirname + '/public/styles'));
 app.use(express.static(__dirname + '/public'));
 
+// Route index
 app.get('/',function(req,res) {
     res.sendFile(path.join(__dirname+'/public/index.html'));
 });
 
+// route theme images
 app.use('/widget/theme-1', express.static('public/theme-1'));
+
+// If static image has not been found, respond with unknown user.
+app.get(['/widget/theme-1/*', '/widget/*'], function (req, res) {
+    res.sendFile(path.join(__dirname+'/public/unknown_user.png'));
+});
 
 app.use(nocache());
 
