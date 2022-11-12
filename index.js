@@ -2,6 +2,7 @@ const Discord = require("discord.js");
 const config = require(`./botconfig/config.json`);
 const settings = require(`./botconfig/settings.json`);
 const colors = require("colors");
+const path = require('path');
 const express = require('express')
 const nocache = require('nocache');
 const app = express()
@@ -56,6 +57,13 @@ client.categories = require("fs").readdirSync(`./commands`);
     })
 //Start the Bot
 client.login(config.token)
+
+app.use('/styles', express.static(__dirname + '/public/styles'));
+app.use(express.static(__dirname + '/public'));
+
+app.get('/',function(req,res) {
+    res.sendFile(path.join(__dirname+'/public/index.html'));
+});
 
 app.use('/widget/theme-1', express.static('public/theme-1'));
 

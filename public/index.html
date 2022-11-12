@@ -1,0 +1,153 @@
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Discord Status Banner | Connecting with people made easier!">
+    <link rel="icon" href="favicon.ico">
+    <title>discord.bastianleicht.de - Discord Status Banner</title>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <link href='//fonts.googleapis.com/css?family=Lato:300,400,900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <link href="styles/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+            font-size: 14px;
+            line-height: 1.42857143;
+            color: #333;
+            background-color: #171a21;
+        }
+        .container {
+            width: 600px!important;
+            margin: 100px auto;
+        }
+        .logo-block {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .logo-block p {
+            color: #b8b6b4;
+        }
+        .logo-block h2 {
+            font-size: 42px;
+            color: #fff;
+        }
+        .form-control {
+            background-color: #101217;
+            border: 1px solid #101217;
+        }
+        .form-control:focus {
+            border-color: #66afe9;
+            outline: 0;
+            -webkit-box-shadow: none;
+            box-shadow: none;
+        }
+        .well {
+            background-color: #292D38;
+            border: 1px solid #292D38;
+            color: #6F7279;
+        }
+        .main_help {
+            background-color: #101217;
+            border: 1px solid #151923;
+            color: #6F7279;
+        }
+        .main_help a, i{
+            color: #FFF;
+        }
+    </style>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <script>
+        function getBanners() {
+            const submitTimeOut = 2;
+            let txtbox = $('#user_id');
+            let btn = $('#create_button');
+
+            txtbox.prop('disabled', true);
+            setTimeout(function(){
+                txtbox.prop('disabled', false);
+            }, submitTimeOut*1000);
+
+            btn.prop('disabled', true);
+            $("#create_button").val("Please wait...");
+            setTimeout(function(){
+                $("#create_button").val("Create banner");
+                btn.prop('disabled', false);
+            }, submitTimeOut*1000);
+
+
+            let link1 = "https://discord.bastianleicht.de/widget/theme-1/<userid>.png";
+            let userid = txtbox.val();
+            $(".link1").val(link1.replace("<userid>", userid));
+            $('#theme1_banner').hide();
+            $('#loader_img').show();
+            $("#theme1_banner").attr("src",link1.replace("<userid>", userid));
+            $('.link1').show();
+        }
+
+        $(document).ready(function(){
+            $('.link1').hide();
+
+            $("#create_button").click(function(){
+                getBanners();
+            });
+
+            $("#user_id").keypress(function(e) {
+                // Enter
+                if(e.which === 13) {
+                    getBanners();
+                }
+            });
+
+            $('#theme1_banner').on('load', function(){
+                $('#theme1_banner').show();
+                $('#loader_img').hide();
+            });
+        });
+    </script>
+</head>
+<body>
+<div class="container">
+    <div class="logo-block">
+        <h2><img src="discord_logo.png" style="width: 50px; height: auto;"  alt="Discord Logo"/> Discord Status Banner</h2>
+        <p>Connecting with people made easier!</p>
+    </div>
+
+    <div class="input-group">
+        <input type="text" id="user_id" class="form-control input-lg" placeholder="Discord User ID" name="url" />
+
+        <div class="input-group-btn">
+            <button type="submit" id="create_button" class="btn btn-primary btn-lg">Create Banner</button>
+        </div>
+    </div>
+    <br>
+
+    <div class="well">
+        <h4>Banner</h4>
+        <input type="text" id="url_textbox" class="form-control input-lg link1" style="display: none;" placeholder="URL" onclick="this.focus();this.select()"><br>
+        <div style="text-align: center;">
+            <br>
+            <img src="loading-50x50.gif" style="height: 50px; border-radius: 50%;" id="loader_img"  alt="loading..."/>
+            <p>Examples:<br>
+                <img src="https://discord.bastianleicht.de/widget/theme-1/350618993020764161.png" id="theme1_banner" alt="Theme 1 Banner"/><br><br>
+            </p>
+        </div>
+    </div>
+    <div class="well main_help">
+        <h4>How to get my ID?</h4>
+        <ol>
+            <li>Join our server by <a target="_blank" href="https://discord.gg/R7V9kAw2nC">Clicking here</a> (Make sure your status is not offline)</li>
+            <li>Our bot will give you your user ID.</li>
+            <li>Fill in your User ID in the textbox above and click Create Banner.</li>
+        </ol>
+        <b>Make sure you stay in the server, otherwise the banner will stop working!</b><br>
+        <i>* Status updates are <b>realtime</b>!</i>
+    </div>
+</div>
