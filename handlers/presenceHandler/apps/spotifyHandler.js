@@ -1,6 +1,11 @@
 const Canvas = require("canvas");
 const fetch = require('isomorphic-unfetch');
+const {registerFont} = require("canvas");
 const { getData, getPreview, getTracks, getDetails } = require('spotify-url-info')(fetch);
+
+registerFont('./assets/fonts/whitney-bold.otf', { family: 'Whitney' })
+registerFont('./assets/fonts/HelveticaNeue-Medium.otf', { family: 'Helvetica Neue' })
+registerFont('./assets/fonts/Lato-Regular.ttf', { family: 'Lato' })
 
 // https://stackoverflow.com/a/1199420
 const StringHelper = str => {
