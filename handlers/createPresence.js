@@ -40,9 +40,73 @@ const StringHelper = str => {
     return { full: str,  truncate };
 };
 
+async function createUnknownPresence() {
+    let backgroundCanvas, avatarCanvas;
+
+    // create "main" Canvas
+    const canvas = Canvas.createCanvas(395, 80);
+    // make it "2D"
+    const ctx = canvas.getContext('2d');
+
+    // 395 x 80 px
+    let custom_bg = false;
+    if(custom_bg === true) {
+        // TODO: Load Images from URL
+        const background = await Canvas.loadImage(`./test-bg.png`);
+        backgroundCanvas = await customBackgroundHandler(background);
+        // Append backgroundCanvas to main canvas.
+        ctx.drawImage(backgroundCanvas, 0, 0);
+    } else {
+        const background = await Canvas.loadImage(`./background-1.png`);
+        ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
+    }
+
+    //define the Username
+    const username = `User not found`;
+    const status_text = 'User not found or not in server!';
+    const activity_text = 'Visit discord.bastianleicht.de for information.';
+    const color = '#747f8d';
+    //if the text is too big then smaller the text
+    ctx.font = 'bold 15px "Whitney", Arial';
+    ctx.fillStyle = '#bec1c6';
+    ctx.fillText(username, 88, canvas.height / 2 - 20);
+
+    //draw the status label
+    ctx.font = 'bold 14px "Whitney"';
+    ctx.fillStyle = '#c2c4c7';
+    ctx.fillText('Status:', 90, canvas.height / 2 + 8);
+
+    //draw the status text
+    ctx.font = '14px "Lato"';
+    ctx.fillStyle = color;
+    ctx.fillText(status_text, 145, canvas.height / 2 + 8);
+
+    //draw the activity text
+    ctx.font = '14px "Lato"';
+    ctx.fillStyle = color;
+    ctx.fillText(activity_text, 90, canvas.height / 2 + 27);
+
+    // create the User Avatar and Status dot
+    const avatar = await Canvas.loadImage('./assets/default_avatar.png');
+    avatarCanvas = await avatarHandler(avatar, color);
+    ctx.drawImage(avatarCanvas, 0, 0);
+
+    const out = fs.createWriteStream(`./public/unknown_user.png`)
+    const stream = canvas.createPNGStream()
+    stream.pipe(out)
+    out.on('finish', () =>  {
+        console.log('The PNG file was created.');
+    });
+
+    return canvas;
+}
+
 async function createPresence(client, user, presence) {
     if(user.bot) return;
     let backgroundCanvas, activityCanvas, avatarCanvas;
+
+    // NOTE: This is to create a new unknown_user.png Image!
+    //createUnknownPresence();
 
     // create "main" Canvas
     const canvas = Canvas.createCanvas(395, 80);
