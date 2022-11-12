@@ -152,7 +152,7 @@ async function createPresence(client, user, presence) {
             ctx.fillStyle = '#ffffff';
             ctx.fillText(activity.state, 90, canvas.height / 2 + 27);
         } else if(activity.type === 'PLAYING') {
-            activityCanvas = await defaultPlayingHandler(activity);
+            activityCanvas = await defaultPlayingHandler(activity, status_text, color);
             ctx.drawImage(activityCanvas, 0, 0);
         } else if(activity.type === 'LISTENING') {
             let length = 38;
