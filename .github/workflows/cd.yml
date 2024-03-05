@@ -25,7 +25,7 @@ jobs:
           key: ${{ secrets.PRIVATE_KEY }}
           port: 22
           script: |
-            cd ~/home/discord-status-bot/
+            cd /home/discord-status-bot/
             git pull origin master
             git status
             npm install --only=prod
