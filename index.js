@@ -6,7 +6,6 @@ const path = require('path');
 const express = require('express')
 const nocache = require('nocache');
 const app = express()
-const port = 80;
 
 const client = new Discord.Client({
     //fetchAllMembers: false,
@@ -77,6 +76,8 @@ app.get(['/widget/theme-1/*', '/widget/*'], function (req, res) {
 
 app.use(nocache());
 
-app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`)
-})
+if(config.webserver.enabled === true) {
+    app.listen(config.webserver.port, () => {
+        console.log(`Example app listening on port http://${config.webserver.domain}:${config.webserver.port}`)
+    })
+}
