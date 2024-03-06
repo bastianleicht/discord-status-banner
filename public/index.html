@@ -83,7 +83,7 @@
             }, submitTimeOut*1000);
 
 
-            let link1 = "https://discord.bastianleicht.de/widget/theme-1/<userid>.png";
+            let link1 = document.URL  + "widget/theme-1/<userid>.png";
             let userid = txtbox.val();
             $(".link1").val(link1.replace("<userid>", userid));
             $('#theme1_banner').hide();
