@@ -10,8 +10,8 @@ module.exports = async (client, oldMember, newMember) => {
     const user = await client.users.fetch(newMember.userId);
     let canvas = await createPresence(client, user, newMember);
     const attachment = new Discord.MessageAttachment(canvas.toBuffer(), 'image.png');
-    const log_channel = client.channels.cache.get('1035282377947222026');
-    log_channel.send({ content: `<@${user.id}> Your Status Updated \n <https://discord.bastianleicht.de/widget/theme-1/${user.id}.png>`, files: [attachment]})
+    const log_channel = client.channels.cache.get(client.config.presence_log_channel);
+    log_channel.send({ content: `<@${user.id}> Your Status Updated \n <https://${client.config.webserver.domain}:${client.config.webserver.port}/widget/theme-1/${user.id}.png>`, files: [attachment]})
 
     /*
     const canvas = Canvas.createCanvas(395, 80);

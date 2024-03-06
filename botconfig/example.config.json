@@ -7,6 +7,7 @@
     "port": 3000,
     "domain": "localhost"
   },
+  "presence_log_channel": "CHANNEL_ID",
   "slashCommandsDirs": [
         {
             "Folder": "Info",
