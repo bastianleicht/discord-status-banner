@@ -14,7 +14,7 @@ module.exports = async (client, oldMember, newMember) => {
 
     let domain;
 
-    switch (client.webserver.port) {
+    switch (client.config.webserver.port) {
         case 80:
             domain = `http://${client.config.webserver.domain}`;
             break;
