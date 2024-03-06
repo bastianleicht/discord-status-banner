@@ -6,9 +6,12 @@ module.exports.customBackgroundHandler = async function customBackgroundHandler(
     const ctx = canvas.getContext('2d');
 
     ctx.drawImage(background,
-        canvas.width / 2 - background.width / 2,
-        canvas.height / 2 - background.height / 2
+        canvas.height / 2 - 20,
+        -25,
+        435,
+        130
     );
+
     /*
     ctx.translate(canvas.width/2,canvas.height/2);
     ctx.drawImage(background,-background.width/2,-background.height/2);
