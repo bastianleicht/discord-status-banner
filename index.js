@@ -79,7 +79,7 @@ app.get(['/widget/theme-1/*', '/widget/*'], function (req, res) {
 app.use(nocache());
 
 if(config.webserver.enabled === true) {
-    app.listen(config.webserver.port, () => {
+    app.listen(config.webserver.server_port, () => {
         console.log(`Example app listening on port http://${config.webserver.domain}:${config.webserver.port}`)
     })
 }

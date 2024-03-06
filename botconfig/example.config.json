@@ -5,6 +5,7 @@
   "webserver": {
     "enabled": true,
     "port": 3000,
+    "server_port": 443,
     "domain": "localhost"
   },
   "presence_log_channel": "CHANNEL_ID",
