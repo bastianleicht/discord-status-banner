@@ -127,7 +127,7 @@ async function createPresence(client, user, presence) {
     }
 
     //define the Username
-    const username = `${user.username}#${user.discriminator}`;
+    const username = `${user.username}`;
     //if the text is too big then smaller the text
     ctx.font = 'bold 15px "Whitney", Arial';
     ctx.fillStyle = '#bec1c6';
