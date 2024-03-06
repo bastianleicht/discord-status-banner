@@ -11,7 +11,21 @@ module.exports = async (client, oldMember, newMember) => {
     let canvas = await createPresence(client, user, newMember);
     const attachment = new Discord.MessageAttachment(canvas.toBuffer(), 'image.png');
     const log_channel = client.channels.cache.get(client.config.presence_log_channel);
-    log_channel.send({ content: `<@${user.id}> Your Status Updated \n <https://${client.config.webserver.domain}:${client.config.webserver.port}/widget/theme-1/${user.id}.png>`, files: [attachment]})
+
+    let domain;
+
+    switch (client.webserver.port) {
+        case 80:
+            domain = `http://${client.config.webserver.domain}`;
+            break;
+        case 443:
+            domain = `https://${client.config.webserver.domain}`;
+            break;
+        default:
+            domain = `http://${client.config.webserver.domain}:${client.config.webserver.port}`;
+    }
+
+    log_channel.send({ content: `<@${user.id}> Your Status Updated \n <${domain}/widget/theme-1/${user.id}.png>`, files: [attachment]})
 
     /*
     const canvas = Canvas.createCanvas(395, 80);
