@@ -18,7 +18,10 @@ module.exports.customBackgroundHandler = async function customBackgroundHandler(
     ctx.translate(-canvas.width/2,-canvas.height/2);
      */
 
-    const background_fade = await Canvas.loadImage(`./background-faded.png`);
+    // https://jsfiddle.net/4hu3sxzy/1/
+
+
+    const background_fade = await Canvas.loadImage(`./assets/theme-2/background-faded.png`);
     ctx.drawImage(background_fade, 0, 0, canvas.width, canvas.height);
     ctx.save();
 
