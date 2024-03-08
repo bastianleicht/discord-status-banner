@@ -122,7 +122,7 @@ async function createPresence(client, user, presence) {
         // Append backgroundCanvas to main canvas.
         ctx.drawImage(backgroundCanvas, 0, 0);
     } else {
-        const background = await Canvas.loadImage(`./background-1.png`);
+        const background = await Canvas.loadImage(`./assets/theme-1/background-1.png`);
         ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
     }
 
