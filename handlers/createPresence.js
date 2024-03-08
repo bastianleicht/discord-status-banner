@@ -279,6 +279,14 @@ async function createPresence(client, user, presence) {
     avatarCanvas = await avatarHandler(avatar, color);
     ctx.drawImage(avatarCanvas, 0, 0);
 
+    // draw blue line
+    ctx.beginPath();
+    ctx.moveTo(0, 80);
+    ctx.lineTo(395, 80);
+    ctx.lineWidth = 5;
+    ctx.strokeStyle = '#7289da';
+    ctx.stroke();
+
     // get the Image as a discord attachment
     const attachment = new Discord.MessageAttachment(canvas.toBuffer(), 'image.png');
 
