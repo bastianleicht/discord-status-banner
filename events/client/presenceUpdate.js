@@ -1,4 +1,4 @@
-const {createPresence} = require("../../handlers/createPresence");
+const {createPresence, createPresenceTheme1} = require("../../handlers/createPresence");
 const Discord = require("discord.js");
 
 //here the event starts
@@ -8,8 +8,17 @@ module.exports = async (client, oldMember, newMember) => {
     console.log(`Old Presence: ${oldMember.status} | New Presence: ${newMember.status}`);
 
     const user = await client.users.fetch(newMember.userId);
+
+    if(user.bot) return;
+
+    // NOTE: This is to create a new unknown_user.png Image!
+    //createUnknownPresence();
+
     let canvas = await createPresence(client, user, newMember);
+    let canvasTheme1 = await createPresenceTheme1(client, user, newMember);
+    //let canvasTheme2 = await createPresenceTheme2(client, user, newMember);
     const attachment = new Discord.MessageAttachment(canvas.toBuffer(), 'image.png');
+    const attachment2 = new Discord.MessageAttachment(canvasTheme1.toBuffer(), 'canvasTheme1.png');
     const log_channel = client.channels.cache.get(client.config.presence_log_channel);
 
     let domain;
@@ -26,6 +35,7 @@ module.exports = async (client, oldMember, newMember) => {
     }
 
     log_channel.send({ content: `<@${user.id}> Your Status Updated \n <${domain}/widget/theme-1/${user.id}.png>`, files: [attachment]})
+    log_channel.send({ content: `<@${user.id}> Your Status Updated (Theme1) \n <${domain}/widget/theme-1/${user.id}.png>`, files: [attachment2]})
 
     /*
     const canvas = Canvas.createCanvas(395, 80);

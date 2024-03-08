@@ -2,7 +2,7 @@ const { MessageEmbed } = require("discord.js");
 const config = require("../../botconfig/config.json");
 const ee = require("../../botconfig/embed.json");
 const settings = require("../../botconfig/settings.json");
-const { createPresence } = require("../../handlers/createPresence");
+const { createPresence, createPresenceTheme1} = require("../../handlers/createPresence");
 const {GetUser} = require("../../handlers/functions");
 const Discord = require("discord.js");
 module.exports = {
@@ -26,9 +26,13 @@ module.exports = {
             let user = await GetUser(message, args)
             let member = message.guild.members.cache.get(user.id);
             let canvas = await createPresence(client, user, member.presence);
+            let canvasTheme1 = await createPresenceTheme1(client, user, member.presence);
 
             const attachment = new Discord.MessageAttachment(canvas.toBuffer(), 'image.png');
+            const attachment2 = new Discord.MessageAttachment(canvasTheme1.toBuffer(), 'canvasTheme1.png');
+
             message.reply({ content: `<@${user.id}> Your Status Updated \n <https://discord.bastianleicht.de/widget/theme-1/${user.id}.png>`, files: [attachment]})
+            message.reply({ content: `<@${user.id}> Your Status Updated (Theme1) \n <https://discord.bastianleicht.de/widget/theme-1/${user.id}.png>`, files: [attachment2]})
         } catch (e) {
             console.log(String(e.stack).bgRed)
             return message.reply({embeds: [new MessageEmbed()
