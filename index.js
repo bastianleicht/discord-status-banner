@@ -2,6 +2,7 @@ const Discord = require("discord.js");
 const config = require(`./botconfig/config.json`);
 const settings = require(`./botconfig/settings.json`);
 const colors = require("colors");
+const mysql         = require('mysql');
 const path = require('path');
 const express = require('express')
 const nocache = require('nocache');
