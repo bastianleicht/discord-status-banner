@@ -8,6 +8,12 @@
     "server_port": 443,
     "domain": "localhost"
   },
+  "database": {
+    "host": "localhost",
+    "user": "root",
+    "password": "",
+    "table": "discord_status_bot"
+  },
   "presence_log_channel": "CHANNEL_ID",
   "slashCommandsDirs": [
         {

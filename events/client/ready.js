@@ -32,4 +32,11 @@ module.exports = client => {
   } catch (e){
     console.log(String(e.stack).grey.italic.dim.bgRed)
   }
+
+  // Connect to MySQL
+  client.pool.getConnection(function (err, connection) {
+    if(err) return console.error(' | MYSQL: Connection error: ' + err);
+
+    console.log(`${client.date} | MySQL has been connected!`);
+  });
 }

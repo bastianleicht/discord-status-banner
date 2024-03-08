@@ -43,6 +43,82 @@ const client = new Discord.Client({
       status: "online"
     }
 });
+
+//  Setting up MYSQL and the Pool Cluster
+const clusterConfig = {
+    canRetry: true,
+    removeNodeErrorCount: 1,
+    defaultSelector: 'RR'
+};
+
+const DBConfig = {
+    connectionLimit : 5,
+    host: config.database.host,
+    user: config.database.user,
+    password: config.database.password,
+    database: config.database.table,
+}
+
+const pool = mysql.createPoolCluster(clusterConfig);
+pool.add('MASTER', DBConfig);
+pool.add('SLAVE1', DBConfig);
+pool.add('SLAVE2', DBConfig);
+pool.add('SLAVE3', DBConfig);
+
+client.dbconfig = DBConfig;
+client.pool = pool;
+
+/**
+ * MySQL Query
+ * @type {{query: (function(): {on: function(*, *): this})}}
+ */
+client.db = {
+    query: function () {
+        let queryArgs = Array.prototype.slice.call(arguments),
+            events = [],
+            eventNameIndex = {};
+
+        pool.getConnection(function (err, conn) {
+            if (err && eventNameIndex.error) eventNameIndex.error();
+            if (conn) {
+                let q = conn.query.apply(conn, queryArgs);
+                q.on('end', function () {
+                    conn.release();
+                });
+
+                events.forEach(function (args) {
+                    q.on.apply(q, args);
+                });
+            }
+        });
+
+        return {
+            on: function (eventName, callback) {
+                events.push(Array.prototype.slice.call(arguments));
+                eventNameIndex[eventName] = callback;
+                return this;
+            }
+        };
+    }
+};
+
+/**
+ * Return's the current Date (yyyy-month-dd hh:mm:ss)
+ * @return {string}
+ */
+function getDate() {
+    const date = new Date();
+    const year = date.getYear() + 1900;
+    const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    const month = months[date.getMonth()];
+    const day = date.getDate().toString().length < 2 ? "0" + date.getDate() : date.getDate();
+    const hour = date.getHours().toString().length < 2 ? "0" + date.getHours() : date.getHours();
+    const minute = date.getMinutes().toString().length < 2 ? "0" + date.getMinutes() : date.getMinutes();
+    const second = date.getSeconds().toString().length < 2 ? "0" + date.getSeconds() : date.getSeconds();
+    return year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
+}
+client.date = getDate();
+
 //Define some Global Collections
 client.commands = new Discord.Collection();
 client.cooldowns = new Discord.Collection();
